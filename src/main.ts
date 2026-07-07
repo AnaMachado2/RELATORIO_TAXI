@@ -1,7 +1,7 @@
 import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
-import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
+import { setupSwagger } from './docs/swagger';
 
 // eslint-disable-next-line @typescript-eslint/no-require-imports
 const oracledb = require('oracledb');
@@ -26,14 +26,7 @@ async function bootstrap() {
         }),
     );
 
-    const config = new DocumentBuilder()
-        .setTitle('API de Histórico de Autorização')
-        .setDescription('APIs para consulta de Permissionários, Motoristas e Veículos a partir do banco Oracle')
-        .setVersion('1.0')
-        .build();
-
-    const document = SwaggerModule.createDocument(app, config);
-    SwaggerModule.setup('api', app, document);
+    setupSwagger(app);
 
     await app.listen(process.env.PORT ?? 8080);
     console.log(`Application is running on: http://localhost:${process.env.PORT ?? 8080}`);
